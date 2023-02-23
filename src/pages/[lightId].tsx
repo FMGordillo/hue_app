@@ -50,15 +50,15 @@ export default function LightPage() {
               <Field
                 name="bri"
                 component={CustomSlider}
-                min={1}
-                max={100}
+                min={0}
+                max={254}
                 label="Brightness"
               />
               <Field
                 name="sat"
                 component={CustomSlider}
                 min={0}
-                max={100}
+                max={254}
                 label="Saturation"
               />
               <Field
