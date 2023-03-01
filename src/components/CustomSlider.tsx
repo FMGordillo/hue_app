@@ -10,12 +10,28 @@ const Container = styled.label`
   }
 `;
 
+const Label = styled.label`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+const Input = styled.input`
+  width: 200px;
+  cursor: ew-resize;
+`;
+
 export default function CustomSlider({ field, form, ...props }) {
+  const percentage = ((Number(field.value) / props.max) * 100).toFixed(0);
   return (
     <Container>
-      <span>{props.label}</span>
-      <input type="range" {...field} {...props} />
-      <span>Current value: {field.value}</span>
+      <Label>
+        <span>{props.label}</span>
+        <Input type="range" {...field} {...props} />
+      </Label>
+      <span>
+        Current value: {percentage}% ({field.value})
+      </span>
     </Container>
   );
 }

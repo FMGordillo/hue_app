@@ -7,10 +7,13 @@ import Link from "next/link";
 import CustomSlider from "../components/CustomSlider";
 import axios from "axios";
 import invariant from "tiny-invariant";
+import { useState } from "react";
+import Button from "../components/Button";
 
 export default function LightPage() {
   const { query } = useRouter();
   const { lightId } = query;
+  const [isUpdating, setIsUpdating] = useState(false);
   const { data, isLoading } = useSWR(
     lightId ? [URLS.GET_LIGHTS, query.lightId] : null,
     fetcherWithConfig
@@ -18,6 +21,7 @@ export default function LightPage() {
 
   const handleSubmit = async (formData: any) => {
     try {
+      setIsUpdating(true);
       invariant(typeof lightId === "string", "LightID must be a string");
       await axios.put(URLS.GET_LIGHT(lightId), {
         id: data.id,
@@ -26,6 +30,8 @@ export default function LightPage() {
       });
     } catch (error) {
       console.log("Error sending light data", error);
+    } finally {
+      setIsUpdating(false);
     }
   };
 
@@ -50,25 +56,27 @@ export default function LightPage() {
               <Field
                 name="bri"
                 component={CustomSlider}
-                min={0}
+                min={1}
                 max={254}
                 label="Brightness"
               />
               <Field
                 name="sat"
                 component={CustomSlider}
-                min={0}
+                min={1}
                 max={254}
                 label="Saturation"
               />
               <Field
                 name="hue"
                 component={CustomSlider}
-                min={0}
+                min={1}
                 max={65535}
                 label="Hue"
               />
-              <input type="submit" value="Update light" />
+              <Button type="submit" disabled={isUpdating}>
+                Update light
+              </Button>
             </Form>
           )}
         </Formik>
